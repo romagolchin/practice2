@@ -48,3 +48,20 @@
 
 ## Задание №1 - выполнение запроса
 
+В методе `loadInBackground` класса `NearbyWebcamsLoader` уже заготовлен код для выполнения запроса -- его нужно доделать, чтобы он выполнял запрос nearby к Webcams.travel API. Описание запроса здесь: [http://developers.webcams.travel/#webcams/list/nearby](http://developers.webcams.travel/#webcams/list/nearby)
+
+URL запроса должен выглядеть так:
+
+```
+https://webcamstravel.p.mashape.com/webcams/list/nearby={latitude},{longitude},{radius}?show=webcams:basic,image,location
+```
+А для авторизации приложения в API к запросу должен быть добавлен HTTP заголовок с ключом API:
+```
+X-Mashape-Key: <ключ API>
+```
+
+Задание:
+* Написать код метода `WebcamsApi.createNearbyRequest`, который создает запрос с нужными URL и заголовками
+* В методе `NearbyWebcamsLoader.loadInBackground` который проверяет результат выполнения запроса и вычитывает ответ (пока нет парсера ответа, можно просто вычитывать ответ вхолостую при помощи `IOUtils.readFully`
+
+Для отладки запросов можно открыть URL `chrome://inspect` в браузере Chrome, там открыть раздел Devices, открыть работающее приложение и смотреть логи траифика во вкладке Network. 
