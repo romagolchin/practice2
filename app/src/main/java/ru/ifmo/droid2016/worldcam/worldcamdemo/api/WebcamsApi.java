@@ -38,7 +38,8 @@ public final class WebcamsApi {
         final String strLong = String.valueOf(longitude);
         final String strRad = String.valueOf(radius);
         final String path = "nearby=" + strLat + "," + strLong + "," + strRad;
-        Uri.Builder builder = Uri.parse(BASE_URL_STRING).buildUpon().appendQueryParameter("show", "webcams:base,image,location");
+        Uri.Builder builder = Uri.parse(BASE_URL_STRING).buildUpon().appendPath("webcams").appendPath("list")
+            .appendEncodedPath(path).appendQueryParameter("show", "webcams:base,image,location");
         Uri uri = builder.build();
         final String LOG_TAG = "Uri built: ";
         Log.v(LOG_TAG, uri.toString());
