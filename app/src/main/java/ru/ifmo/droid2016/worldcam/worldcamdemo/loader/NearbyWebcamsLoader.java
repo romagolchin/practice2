@@ -6,19 +6,14 @@ import android.util.Log;
 
 import com.facebook.stetho.urlconnection.StethoURLConnectionManager;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.ifmo.droid2016.worldcam.worldcamdemo.api.WebcamsApi;
 import ru.ifmo.droid2016.worldcam.worldcamdemo.model.Webcam;
-import ru.ifmo.droid2016.worldcam.worldcamdemo.utils.IOUtils;
 
 /**
  * Загрузчик списка камер в некотором радиусе от указанных координат.
@@ -45,25 +40,6 @@ public class NearbyWebcamsLoader extends AsyncTaskLoader<LoadResult<List<Webcam>
     }
 
 
-    private List<Webcam> parseJson(InputStream in) {
-        List<Webcam> result = new ArrayList<>();
-        try {
-            String content = IOUtils.readToString(in, "UTF-8");
-            JSONObject root = new JSONObject(content);
-            JSONArray webcams = root.getJSONArray("webcams");
-            for (int i = 0; i < webcams.length(); ++i) {
-                JSONObject object = (JSONObject) webcams.get(i);
-                String id = object.getJSONObject("id").toString();
-                String title = object.getJSONObject("title").toString();
-                String imageUrl = object.getJSONObject("image").getJSONObject("current").getJSONObject("preview").toString();
-                result.add(new Webcam(id, title, imageUrl));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     @Override
     public LoadResult<List<Webcam>> loadInBackground() {
         final StethoURLConnectionManager stethoManager = new StethoURLConnectionManager("API");
@@ -85,7 +61,7 @@ public class NearbyWebcamsLoader extends AsyncTaskLoader<LoadResult<List<Webcam>
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 in = connection.getInputStream();
                 in = stethoManager.interpretResponseStream(in);
-                data = parseJson(in);
+                data = WebcamsDomParser.parseWebcams(in);
                 resultType = ResultType.OK;
             } else {
                 throw new BadResponseException("HTTP" + connection.getResponseCode() + ", " + connection.getResponseMessage());

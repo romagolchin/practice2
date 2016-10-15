@@ -34,13 +34,11 @@ public final class WebcamsApi {
     public static HttpURLConnection createNearbyRequest(double latitude,
                                                         double longitude,
                                                         double radius) throws IOException {
-        // TODO
-//        URL baseUrl = new URL(BASE_URL_STRING);
         final String strLat = String.valueOf(latitude);
         final String strLong = String.valueOf(longitude);
         final String strRad = String.valueOf(radius);
         final String path = "nearby=" + strLat + "," + strLong + "," + strRad;
-        Uri.Builder builder = Uri.parse(BASE_URL_STRING).buildUpon().appendQueryParameter("show", "webcams:base, image, location");
+        Uri.Builder builder = Uri.parse(BASE_URL_STRING).buildUpon().appendQueryParameter("show", "webcams:base,image,location");
         Uri uri = builder.build();
         final String LOG_TAG = "Uri built: ";
         Log.v(LOG_TAG, uri.toString());
